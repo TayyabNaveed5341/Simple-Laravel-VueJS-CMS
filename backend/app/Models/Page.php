@@ -17,10 +17,6 @@ class Page extends Model
 
         static::creating(function($page) {            
 
-            info('Creating event called'); 
-
-  
-
             $page->full_slug_path = (new PageService)->generateFullPath($page);
 
         });
@@ -31,5 +27,10 @@ class Page extends Model
     }
     public function parent(){
         return $this->belongsTo(Page::class, 'parent_id', 'id');
+    }
+
+    //s
+    public function scopeRootPages($q){
+        $q->whereNull('parent_id');
     }
 }

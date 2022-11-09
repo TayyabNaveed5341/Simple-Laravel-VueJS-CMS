@@ -20,6 +20,6 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/pages', [PageController::class, 'store']);
-
+Route::get('/pages', [PageController::class, 'index']);
 Route::get('/pages/{page:full_slug_path}', [PageController::class, 'show'])->name('page.show')
     ->where('page', '.*');

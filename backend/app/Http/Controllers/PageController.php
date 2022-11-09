@@ -19,6 +19,8 @@ class PageController extends Controller
     public function index()
     {
         //
+        $pages = Page::rootPages()->get();
+        return PageResource::collection($pages);
     }
 
 
@@ -49,13 +51,6 @@ class PageController extends Controller
         //
         $page->load('parent', 'childPages');
         return (new PageResource($page));
-        return response()->json([
-            'message'=>"Retreived Successfully",
-            'page'=>[
-                $page,
-                'children'=>$page
-            ]
-        ]);
     }
 
     /**

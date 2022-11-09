@@ -50,4 +50,10 @@ class PageTest extends TestCase
         $res->assertStatus(200);
         $res->assertJsonStructure(['page']);
     }
+    public function test_page_index(){
+
+        $res = $this->getJson('/api/pages');
+        $res->assertStatus(200);
+        $res->assertJsonStructure(['data']);
+    }
 }

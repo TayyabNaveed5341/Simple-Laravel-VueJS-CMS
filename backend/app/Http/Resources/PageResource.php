@@ -18,8 +18,9 @@ class PageResource extends JsonResource
         return [
             'title'=>$this->title,
             'slug'=>$this->slug,
-            'full_path'=>route('page.show', $this->full_slug_path),
+            'full_path'=>$this->full_slug_path,
             'content'=>$this->content,
+            'last_updated'=>$this->updated_at,
             'parent'=>new PageResource($this->whenLoaded('parent')),
             'children'=>PageResource::collection($this->whenLoaded('childPages'))
 
