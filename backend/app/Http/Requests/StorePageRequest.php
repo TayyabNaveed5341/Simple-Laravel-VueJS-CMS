@@ -13,7 +13,7 @@ class StorePageRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,6 +25,10 @@ class StorePageRequest extends FormRequest
     {
         return [
             //
+            'parent_id'=>['nullable', 'integer', 'exists:pages,id'],
+            'title'=>['required', 'string', 'max:200'],
+            'slug'=>['required', 'string', 'regex:/[a-z_]/', 'max:200', 'unique:pages'],
+            'content'=>['required', 'string'],
         ];
     }
 }

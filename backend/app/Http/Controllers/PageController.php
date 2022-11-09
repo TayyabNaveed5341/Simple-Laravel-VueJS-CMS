@@ -8,6 +8,8 @@ use App\Models\Page;
 
 class PageController extends Controller
 {
+    
+    
     /**
      * Display a listing of the resource.
      *
@@ -18,15 +20,6 @@ class PageController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -37,6 +30,11 @@ class PageController extends Controller
     public function store(StorePageRequest $request)
     {
         //
+        $v = $request->validated();
+        Page::create($v);
+        return response()->json([
+            'message'=>'Page successfully created',
+        ], 201);
     }
 
     /**

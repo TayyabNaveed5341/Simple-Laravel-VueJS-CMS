@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/pages/{page}', function ($page) {
-    return $page;
-})->where('page', '.*');
+Route::post('/pages', [PageController::class, 'store']);
+
+Route::get('/pages/{full_slug}', function ($full_slug) {
+    
+    return $full_slug;
+})->where('full_slug', '.*');

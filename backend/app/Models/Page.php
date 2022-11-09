@@ -10,6 +10,8 @@ class Page extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['parent_id', 'title', 'slug', 'content'];
+
     public static function boot() {
         parent::boot();
 
