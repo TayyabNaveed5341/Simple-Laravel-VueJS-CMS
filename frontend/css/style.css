@@ -1,0 +1,15 @@
+a {
+    text-decoration: none;
+    color: #42b883;
+  }
+  li {
+    border:1px solid gray;
+    line-height: 1.25em;
+    margin-bottom: 20px;
+
+  }
+  .author,
+  .date {
+    font-weight: bold;
+  }
+  

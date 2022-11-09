@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+</script>
+<script type="module">
+    import { createApp } from 'vue'
+    
+    const API_URL = `http://127.0.0.1:8002/api/pages/`
+    
+    createApp({
+      data: () => ({
+        currentPath: null,
+        page: null
+      }),
+    
+      created() {
+        let urlHashText = this.getUrlHashText()
+
+        this.fetchData((urlHashText && urlHashText.trim())?urlHashText:'')
+      },
+      mounted(){
+        window.addEventListener('hashchange', () => {
+          this.fetchData(this.getUrlHashText())
+        })
+      },
+    
+      watch: {
+        currentPath: 'fetchData'
+      },
+    
+      methods: {
+        async fetchData(hash) {
+          const url = `${API_URL}${hash}`
+          console.log(url)
+          const rJson = (await (await fetch(url)).json())
+          if(rJson){
+              this.page = ('page' in rJson)?rJson.page:rJson
+          }else console.log('request failed', p)
+          console.log(this.page)
+        },
+        getUrlHashText(){
+          return window.location.hash.replace('#', '')
+        },
+        truncate(v, maxLength=128) {
+          return maxLength > 0 ? v.slice(0, maxLength) : v
+        }
+      }
+    }).mount('#app')
+    </script>
+    
+    <div id="app">
+      <div v-if="'title' in page">
+
+        <h1>{{this.page.title}}</h1>
+        <span v-if="page.parent"><a :href="`#${page.parent.full_path}`">&lt; back</a> | </span>
+        <a href="#">Home</a>
+        <p>{{page.content}}</p>
+      </div>
+      <div v-else>
+        <h1>Pages</h1>
+      </div>
+     
+      <ul>
+        <li v-for="{ title, slug, full_path, content, last_updated} in page.children??page.data">
+          <a :href="`#${full_path}`" class="commit">{{ truncate(title, 64) }}</a>
+          <p>{{ truncate(content) }}</p>
+          <small>Created: <span class="date">{{ last_updated}}</span></small>
+        </li>
+      </ul>
+    </div>
