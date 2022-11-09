@@ -16,7 +16,7 @@ class PageTest extends TestCase
         return Page::inRandomOrder()->first();
     }
     /**
-     * A basic feature test example.
+     * Tests page creation
      *
      * @return void
      */
@@ -48,6 +48,6 @@ class PageTest extends TestCase
 
         $res = $this->getJson('/api/pages/'.$fSlug);
         $res->assertStatus(200);
-        $res->assertJsonStructure(['pages']);
+        $res->assertJsonStructure(['page']);
     }
 }

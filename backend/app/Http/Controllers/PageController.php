@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
+use App\Http\Resources\PageResource;
 use App\Models\Page;
 
 class PageController extends Controller
@@ -46,6 +47,15 @@ class PageController extends Controller
     public function show(Page $page)
     {
         //
+        $page->load('parent', 'childPages');
+        return (new PageResource($page));
+        return response()->json([
+            'message'=>"Retreived Successfully",
+            'page'=>[
+                $page,
+                'children'=>$page
+            ]
+        ]);
     }
 
     /**
