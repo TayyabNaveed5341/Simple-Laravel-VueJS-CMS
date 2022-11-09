@@ -1,0 +1,26 @@
+
+
+ 
+how to:
+	backend (Laravel)
+		run the migrations & seeders
+		run php artisan serve
+		verify by running tests
+		APIs
+			get /api/pages
+			get /api/pages/page_path
+			post /api/pages
+				parent_id
+				title
+				slug
+				content
+				
+				
+	
+	frontend (VueJS)
+		consists of html files and can be executed by loading the pages.html file in modern browser
+
+
+important decisions and assumptions
+-	my npm installation was giving me trouble with Vue at the moment so I took the CDN approach
+
