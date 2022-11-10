@@ -54,17 +54,6 @@ class PageController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Page  $page
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Page $page)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdatePageRequest  $request
@@ -74,6 +63,11 @@ class PageController extends Controller
     public function update(UpdatePageRequest $request, Page $page)
     {
         //
+        $v = $request->validated();
+        $page->update($v);
+        return response()->json([
+            'message'=>'Page successfully updated',
+        ], 200);
     }
 
     /**
@@ -85,5 +79,12 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         //
+        $child = $page->childPages();
+        if($child->exists()){
+            $child->update([
+                'parent_id'=>$page->parent_id
+            ]);
+        }
+        $page->delete();
     }
 }

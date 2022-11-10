@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Page;
+use App\Services\PageService;
 use Database\Factories\PageFactory;
 use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,18 +68,19 @@ class PageTest extends TestCase
             'title'=>$title,
             'slug'=>$slug,
             'content'=>$this->faker->realText(400),
-
         ];
+
         $res = $this->putJson("/api/pages/$page->full_slug_path", $data);
         $res->assertStatus(200);
         $res->assertJsonStructure(['message']);
         $this->assertDatabaseHas('pages', $data);
-
+        $this->assertEquals((new PageService)->generateFullPath($page), $page->fresh()->full_slug_path);
     }
     public function test_page_delete(){
         $page = $this->getRandomPage();
         $res = $this->deleteJson("/api/pages/$page->full_slug_path");
         $res->assertStatus(200);
         $this->assertDatabaseMissing('pages', ['id'=>$page->id]);
+        $this->assertDatabaseMissing('pages', ['parent_id'=>$page->id]);
     }
 }

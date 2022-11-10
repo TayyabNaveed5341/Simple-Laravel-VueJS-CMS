@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/pages', [PageController::class, 'store']);
-Route::get('/pages', [PageController::class, 'index']);
-Route::get('/pages/{page:full_slug_path}', [PageController::class, 'show'])->name('page.show')
-    ->where('page', '.*');
+Route::prefix('/pages/')->group(function(){
+    Route::post('', [PageController::class, 'store']);
+    Route::get('', [PageController::class, 'index']);
+    Route::get('{page:full_slug_path}', [PageController::class, 'show'])->name('page.show')->where('page', '.*');
+    Route::put('{page:full_slug_path}', [PageController::class, 'update'])->where('page', '.*');
+    Route::delete('{page:full_slug_path}', [PageController::class, 'destroy'])->where('page', '.*');
+});
