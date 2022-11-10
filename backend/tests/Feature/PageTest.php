@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Page;
+use Database\Factories\PageFactory;
+use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
@@ -10,7 +12,9 @@ use Tests\TestCase;
 
 class PageTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
+
+    protected $seeder = PageSeeder::class;
 
     private function getRandomPage(){
         return Page::inRandomOrder()->first();
@@ -41,11 +45,8 @@ class PageTest extends TestCase
 
     public function test_page_get(){
 
-        
         $fSlug = $this->getRandomPage()->full_slug_path;
         
-
-
         $res = $this->getJson('/api/pages/'.$fSlug);
         $res->assertStatus(200);
         $res->assertJsonStructure(['page']);
@@ -55,5 +56,29 @@ class PageTest extends TestCase
         $res = $this->getJson('/api/pages');
         $res->assertStatus(200);
         $res->assertJsonStructure(['data']);
+    }
+    public function test_page_update(){
+        $page = $this->getRandomPage();
+        $title = $this->faker->jobTitle().rand(1, 9);
+        $slug = Str::slug($title, '-');
+        $parentId = $this->getRandomPage()->id;
+        $data = [
+            'parent_id'=>$parentId==$page->id?null:$parentId,
+            'title'=>$title,
+            'slug'=>$slug,
+            'content'=>$this->faker->realText(400),
+
+        ];
+        $res = $this->putJson("/api/pages/$page->full_slug_path", $data);
+        $res->assertStatus(200);
+        $res->assertJsonStructure(['message']);
+        $this->assertDatabaseHas('pages', $data);
+
+    }
+    public function test_page_delete(){
+        $page = $this->getRandomPage();
+        $res = $this->deleteJson("/api/pages/$page->full_slug_path");
+        $res->assertStatus(200);
+        $this->assertDatabaseMissing('pages', ['id'=>$page->id]);
     }
 }

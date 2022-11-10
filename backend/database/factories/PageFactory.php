@@ -16,7 +16,7 @@ class PageFactory extends Factory
     public function definition()
     {
         $title = $this->faker->jobTitle();
-        $slug = Str::slug($title, '_');
+        $slug = Str::slug($title, '_').rand(1, 9);
         return [
             //
             'title'=>$title,
