@@ -19,6 +19,7 @@ how to:
 	
 	frontend (VueJS)
 		consists of html files and can be executed by loading the pages.html file in modern browser
+		on slightly older versions of firefox (and some other brwosers) you may need to enable importmap
 
 
 important decisions and assumptions
